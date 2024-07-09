@@ -8,14 +8,29 @@ Console.WriteLine($"({point2.X}, {point2.Y})");
 
 // Boss Battle 2 - The Color
 Color color1 = new Color(245, 67, 50);
-Color color2 = new Color();
-color2 = Color.Purple;
+Color color2 = Color.Purple;
 
 Console.WriteLine($"Color 1: ({color1.RedChannel}, {color1.GreenChannel}, {color1.BlueChannel})");
 Console.WriteLine($"Color 2: ({color2.RedChannel}, {color2.GreenChannel}, {color2.BlueChannel})");
 
+// Boss Battle 3 - The Card
+void CreateCards()
+{
+    foreach(CardColor color in Enum.GetValues(typeof(CardColor)))
+    {
+        foreach(CardRank rank in Enum.GetValues(typeof(CardRank)))
+        {
+            Card card = new Card(color, rank);
+            Console.WriteLine($"The {color} {rank}");
+        }
+    }
+}
+
+CreateCards();
+
 Console.ReadKey();
 
+// Boss Battle 1 - The Point
 public class Point {
     public int X {get; set;}
     public int Y { get; set; }
@@ -33,6 +48,7 @@ public class Point {
     }
 }
 
+// Boss Battle 2 - The Color
 public class Color
 {
     public int RedChannel { get; set; }
@@ -94,3 +110,28 @@ public class Color
     }
 
 }
+
+// Boss Battle 3 - The Card
+class Card
+{
+    public CardColor Color { get; }
+    public CardRank Rank { get; }
+
+    public Card(CardColor color, CardRank rank)
+    {
+        Color = color;
+        Rank = rank;
+    }
+
+    public void GetCardType()
+    {
+        if (Rank == CardRank.Dollar || Rank == CardRank.Percent || Rank == CardRank.Caret || Rank == CardRank.Ampersand)
+            Console.WriteLine($"This card is a symbol card ranked {Rank}");
+        else Console.WriteLine($"This card is a number card ranked {Rank}");
+    }
+}
+
+
+// Boss Battle 3 - The Card
+enum CardColor { Red, Green, Blue, Yellow}
+enum CardRank { One = 1, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Dollar, Percent, Caret, Ampersand }
