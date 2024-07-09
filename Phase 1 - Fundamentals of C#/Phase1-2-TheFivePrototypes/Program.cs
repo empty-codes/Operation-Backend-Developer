@@ -3,15 +3,17 @@
 Point point1 = new Point(2, 3);
 Point point2 = new Point(-4, 0);
 
-//Console.WriteLine($"({point1.X}, {point1.Y})");
-//Console.WriteLine($"({point2.X}, {point2.Y})");
+Console.WriteLine($"({point1.X}, {point1.Y})");
+Console.WriteLine($"({point2.X}, {point2.Y})");
 
 // Boss Battle 2 - The Color
 Color color1 = new Color(245, 67, 50);
 Color color2 = Color.Purple;
 
-//Console.WriteLine($"Color 1: ({color1.RedChannel}, {color1.GreenChannel}, {color1.BlueChannel})");
-//Console.WriteLine($"Color 2: ({color2.RedChannel}, {color2.GreenChannel}, {color2.BlueChannel})");
+Console.WriteLine($"Color 1: ({color1.RedChannel}, {color1.GreenChannel}, {color1.BlueChannel})");
+Console.WriteLine($"Color 2: ({color2.RedChannel}, {color2.GreenChannel}, {color2.BlueChannel})");
+
+Console.Clear(); //comment this out to view the results for boss battle 1 and 2 when run
 
 // Boss Battle 3 - The Card
 void CreateCards()
@@ -21,25 +23,30 @@ void CreateCards()
         foreach(CardRank rank in Enum.GetValues(typeof(CardRank)))
         {
             Card card = new Card(color, rank);
-            //Console.WriteLine($"The {color} {rank}");
+            Console.WriteLine($"The {color} {rank}");
         }
     }
 }
 
-//CreateCards();
+CreateCards();
+
+Console.Clear(); // comment this out to view the results for boss battle 3 when run
 
 // Boss Battle 4 - The Locked Door
-int passcode;
-Console.WriteLine("You are to set a numeric passcode for the door, it must be a four digit number e.g 1234, 5678.");
-while(true)
-{
-    Console.Write("Enter a passcode for the door: ");
-    passcode = int.Parse(Console.ReadLine());
-    if (passcode >= 1000 && passcode <= 9999) break;
+ int SetPasscode() {
+    int passcode;
+    Console.WriteLine("You are to set a numeric passcode for the door, it must be a four digit number e.g 1234, 5678.");
+    while (true)
+    {
+        Console.Write("Enter a passcode for the door: ");
+        passcode = int.Parse(Console.ReadLine());
+        if (passcode >= 1000 && passcode <= 9999) break;
+    }
+    Console.Clear();
+    return passcode;
 }
-Console.Clear();
 
-Door door = new Door(passcode);
+Door door = new Door(SetPasscode());
 
 while(true)
 {
@@ -61,11 +68,15 @@ while(true)
             Console.Clear();
             break;
         case "unlock":
-            door.UnlockDoor();
+            Console.Write("Enter the current passcode: ");
+            int unlockPasscode = int.Parse(Console.ReadLine());
+            door.UnlockDoor(unlockPasscode);
             Console.Clear();
             break;
         case "change passcode":
-            door.ChangePasscode();
+            Console.Write("Enter the current passcode: ");
+            int currentPasscode = int.Parse(Console.ReadLine());
+            door.ChangePasscode(currentPasscode, SetPasscode());
             Console.Clear();
             break;
         case "exit":
@@ -182,7 +193,7 @@ class Card
 // Boss Battle 4 - The Locked Door
 public class Door
 {
-    public DoorState State { get; set; } = DoorState.Closed;
+    public DoorState State { get; private set; } = DoorState.Closed;
     private int Passcode { get; set; }
 
     public Door(int passcode)
@@ -205,39 +216,31 @@ public class Door
         if (State == DoorState.Closed) State = DoorState.Open;
     }
 
-    public void UnlockDoor()
+    public void UnlockDoor(int currentPasscode)
     {
-        if (State == DoorState.Locked)
+        if (State == DoorState.Locked && currentPasscode == Passcode) State = DoorState.Closed;
+        else
         {
-            Console.Write("Enter the current passcode: ");
-            int currentPasscode = int.Parse(Console.ReadLine());
-            if (currentPasscode == Passcode) State = DoorState.Closed;
-            else
-            {
-                Console.WriteLine("Incorrect passcode.");
-                Console.ReadKey();
-            }
+            Console.WriteLine("Incorrect passcode.");
+            Console.ReadKey();
         }
-    }
 
-    public void ChangePasscode()
+        }
+
+    public void ChangePasscode(int currentPasscode, int newPasscode)
     {
-       Console.Write("Enter the current passcode: ");
-       int currentPasscode = int.Parse(Console.ReadLine());
+
         if (currentPasscode == Passcode)
         {
-            int newPasscode;
-            while (true)
-            {
-                Console.WriteLine("Your numeric passcode must be a four digit number e.g 1234, 5678.");
-                Console.Write("Enter your new passcode: ");
-                newPasscode = int.Parse(Console.ReadLine());
-                if (newPasscode >= 1000 && newPasscode <= 9999) break;
-            }
             Passcode = newPasscode;
             Console.WriteLine("Passcode successfully changed.");
+            Console.ReadKey();
         }
-        else Console.WriteLine("Incorrect passcode");
+        else
+        {
+            Console.WriteLine("Incorrect passcode");
+            Console.ReadKey();
+        }
     }
 
 
