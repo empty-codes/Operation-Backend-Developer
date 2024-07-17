@@ -1,4 +1,6 @@
 ﻿
+using System.Diagnostics.Metrics;
+
 char? player1_choice = ' ', player2_choice = ' ';
 Players player = new Players();
 void getPlayer1Choice()
@@ -24,33 +26,66 @@ play.DisplayBoard();
 
 while(true)
 {
-    getPlayer1Square();
-    getPlayer2Square();
+
+    if (getPlayer1Square() == false || getPlayer2Square() == false)
+    {
+        Console.WriteLine("The game has ended as a draw!");
+        break;
+    }
+    else continue;
 }
 
 
-void getPlayer1Square()
+    
+
+
+
+
+bool getPlayer1Square()
 {
+    int count1 = 0;
     Console.Write("\n\nPlayer 1, choose the square you want to play in using numbers 1 to 9: ");
     int player1_square = int.Parse(Console.ReadLine());
     if (play.UpdateBoard(player1_square, Players.Player1) == false)
     {
         Console.WriteLine("This square is already occupied! Choose another square");
-        getPlayer1Square();
+        for (int a = 1; a < 10; a++)
+        {
+            if (play.UpdateBoard(a, Players.Player1) == false) count1++;
+        }
+        if (count1 == 9) return false;
+        else
+        {
+            getPlayer1Square();
+        }
+        
     }
+    return true;
     
 }
 
-void getPlayer2Square()
+bool getPlayer2Square()
 {
+    int count2 = 0;
     Console.Write("\n\nPlayer 2, choose the square you want to play in using numbers 1 to 9: ");
     int player2_square = int.Parse(Console.ReadLine());
     if (play.UpdateBoard(player2_square, Players.Player2) == false)
     {
         Console.WriteLine("This square is already occupied! Choose another square");
-        getPlayer2Square();
+        for (int a = 1; a < 10; a++)
+        {
+            if (play.UpdateBoard(a, Players.Player2) == false) count2++;
+        }
+        if (count2 == 9) return false;
+        else
+        {
+            getPlayer2Square();
+        }
     }
+    return true;
+
 }
+    
 
 
 Console.ReadKey();
@@ -112,6 +147,8 @@ class TicTacToeGame {
         }
         Console.WriteLine();
     }
+
+    
 
     public bool UpdateBoard(int playerSquare, Players Player)
     {
@@ -195,6 +232,28 @@ class TicTacToeGame {
         DisplayBoard();
         return true;
     }
+
+    //public void checkForXWin()
+    //{
+    //    for (int i = 0; i < 3; i++)
+    //    {
+    //        for (int j = 0; j < 3; j++)
+    //        {
+    //            if (Board[i, j] == 'X' && Board[i + 1, j + 1] == 'X' && Board[i + 2, j + 2] == 'X')
+
+    //            if (Board[i, j] == 'X' && Board[i, j + 1] == 'X' && Board[i, j + 2] == 'X' )
+    //            if (Board[i + 1, j] == 'X' && Board[i + 1, j + 1] == 'X' && Board[i + 1 , j + 2] == 'X')
+    //            if (Board[i + 2, j] == 'X' && Board[i + 2, j + 1] == 'X' && Board[i + 2, j + 2] == 'X')
+
+    //            if (Board[i, j] == 'X' && Board[i + 1, j] == 'X' && Board[i + 2, j] == 'X')
+    //            if (Board[i, j + 1] == 'X' && Board[i + 1, j + 1] == 'X' && Board[i + 2, j + 1] == 'X')
+    //            if (Board[i, j + 2] == 'X' && Board[i + 1, j + 2] == 'X' && Board[i + 2, j + 2] == 'X')
+
+             
+    //        }
+    //    }
+     
+    //}
 
 
 }
