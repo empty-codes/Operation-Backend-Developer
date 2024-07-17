@@ -7,7 +7,7 @@ void getPlayer1Choice()
     {
         Console.Write("Player 1, choose X or O: ");
         player1_choice = char.Parse(Console.ReadLine());
-        if (player1_choice == 'X' || player2_choice == 'O') break;
+        if (player1_choice == 'X' || player1_choice == 'O') break;
         else Console.WriteLine("Error!, Enter X or O");
     }
     
@@ -21,18 +21,36 @@ Console.ReadKey();
 Console.Clear();
 
 play.DisplayBoard();
-getPlayerSquare();
 
-void getPlayerSquare()
+while(true)
 {
-    Console.Write("Player 1, choose the square you want to play in using numbers 1 to 9: ");
-    int player1_square = int.Parse(Console.ReadLine());
-    play.UpdateBoard(player1_square, Players.Player1);
-    Console.Write("Player 2, choose the square you want to play in using numbers 1 to 9: ");
-    int player2_square = int.Parse(Console.ReadLine());
-    play.UpdateBoard(player2_square, Players.Player2);
+    getPlayer1Square();
+    getPlayer2Square();
 }
 
+
+void getPlayer1Square()
+{
+    Console.Write("\n\nPlayer 1, choose the square you want to play in using numbers 1 to 9: ");
+    int player1_square = int.Parse(Console.ReadLine());
+    if (play.UpdateBoard(player1_square, Players.Player1) == false)
+    {
+        Console.WriteLine("This square is already occupied! Choose another square");
+        getPlayer1Square();
+    }
+    
+}
+
+void getPlayer2Square()
+{
+    Console.Write("\n\nPlayer 2, choose the square you want to play in using numbers 1 to 9: ");
+    int player2_square = int.Parse(Console.ReadLine());
+    if (play.UpdateBoard(player2_square, Players.Player2) == false)
+    {
+        Console.WriteLine("This square is already occupied! Choose another square");
+        getPlayer2Square();
+    }
+}
 
 
 Console.ReadKey();
@@ -41,7 +59,7 @@ Console.ReadKey();
 class TicTacToeGame {
 
     public char Player1 { get; }
-    public char Player2 { get; set; }
+    public char Player2 { get; private set; }
     public int Player1Square { get; }
     public int Player2Square { get; }
     public Players Player { get; }
@@ -95,49 +113,87 @@ class TicTacToeGame {
         Console.WriteLine();
     }
 
-    public void UpdateBoard(int playerSquare, Players Player)
+    public bool UpdateBoard(int playerSquare, Players Player)
     {
         switch(playerSquare)
         {
             case 1:
-                if (Player == Players.Player1) Board[2, 0] = Player1;
-                if (Player == Players.Player2) Board[2, 0] = Player2;
+                if (Board[2, 0] == Player1 || Board[2, 0] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[2, 0] = Player1;
+                    if (Player == Players.Player2) Board[2, 0] = Player2;
+                }
                 break;
             case 2:
-                if (Player == Players.Player1) Board[2, 1] = Player1;
-                if (Player == Players.Player2) Board[2, 1] = Player2;
+                if (Board[2, 1] == Player1 || Board[2, 1] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[2, 1] = Player1;
+                    if (Player == Players.Player2) Board[2, 1] = Player2;
+                }
                 break;
             case 3:
-                if (Player == Players.Player1) Board[2, 2] = Player1;
-                if (Player == Players.Player2) Board[2, 2] = Player2;
+                if (Board[2, 2] == Player1 || Board[2, 2] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[2, 2] = Player1;
+                    if (Player == Players.Player2) Board[2, 2] = Player2;
+                }
                 break;
             case 4:
-                if (Player == Players.Player1) Board[1, 0] = Player1;
-                if (Player == Players.Player2) Board[1, 0] = Player2;
+                if (Board[1, 0] == Player1 || Board[1, 0] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[1, 0] = Player1;
+                    if (Player == Players.Player2) Board[1, 0] = Player2;
+                }
                 break;
             case 5:
-                if (Player == Players.Player1) Board[1, 1] = Player1;
-                if (Player == Players.Player2) Board[1, 1] = Player2;
+                if (Board[1, 1] == Player1 || Board[1, 1] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[1, 1] = Player1;
+                    if (Player == Players.Player2) Board[1, 1] = Player2;
+                }
                 break;
             case 6:
-                if (Player == Players.Player1) Board[1, 2] = Player1;
-                if (Player == Players.Player2) Board[1, 2] = Player2;
+                if (Board[1, 2] == Player1 || Board[1, 2] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[1, 2] = Player1;
+                    if (Player == Players.Player2) Board[1, 2] = Player2;
+                }
                 break;
             case 7:
-                if (Player == Players.Player1) Board[0, 0] = Player1;
-                if (Player == Players.Player2) Board[0, 0] = Player2;
+                if (Board[0, 0] == Player1 || Board[0, 0] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[0, 0] = Player1;
+                    if (Player == Players.Player2) Board[0, 0] = Player2;
+                }
                 break;
             case 8:
-                if (Player == Players.Player1) Board[0, 1] = Player1;
-                if (Player == Players.Player2) Board[0, 1] = Player2;
+                if (Board[0, 1] == Player1 || Board[0, 1] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[0, 1] = Player1;
+                    if (Player == Players.Player2) Board[0, 1] = Player2;
+                }
                 break;
             case 9:
-                if (Player == Players.Player1) Board[0, 2] = Player1;
-                if (Player == Players.Player2) Board[0, 2] = Player2;
+                if (Board[0, 2] == Player1 || Board[0, 2] == Player2) return false;
+                else
+                {
+                    if (Player == Players.Player1) Board[0, 2] = Player1;
+                    if (Player == Players.Player2) Board[0, 2] = Player2;
+                }
                 break;
 
         }
+        Console.WriteLine("\n");
         DisplayBoard();
+        return true;
     }
 
 
