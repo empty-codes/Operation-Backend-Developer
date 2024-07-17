@@ -1,6 +1,4 @@
 ﻿
-using System.Diagnostics.Metrics;
-
 char? player1_choice = ' ', player2_choice = ' ';
 Players player = new Players();
 void getPlayer1Choice()
@@ -18,31 +16,71 @@ void getPlayer1Choice()
 
 getPlayer1Choice();
 TicTacToeGame play = new TicTacToeGame(player1_choice);
-Console.WriteLine($"Player 2, you are {play.GetPlayer2Choice()}");
+player2_choice = play.GetPlayer2Choice();
+Console.WriteLine($"Player 2, you are {player2_choice}");
 Console.ReadKey();
 Console.Clear();
 
 play.DisplayBoard();
 
-while(true)
+while (true)
 {
+    bool player1State = getPlayer1Square();
 
-    if (getPlayer1Square() == false || getPlayer2Square() == false)
+    bool player2State = getPlayer2Square();
+
+    if (getWin() == true)
+    {
+        break;
+    }
+    if (getWin() == false)
+    {
+        continue;
+    }
+
+    if (player1State == false || player2State == false)
     {
         Console.WriteLine("The game has ended as a draw!");
         break;
     }
-    else continue;
 }
 
-
-    
-
-
-
+bool getWin()
+{
+    if (play.checkForOWin() == true)
+    {
+        if (player1_choice == 'O')
+        {
+            Console.WriteLine("Player 1 has WON!");
+            return true;
+        }
+        if (player2_choice == 'O')
+        {
+            Console.WriteLine("Player 2 has WON!");
+            return true;
+        }
+        return true;
+    }
+    if (play.checkForXWin() == true)
+    {
+        if (player1_choice == 'X')
+        {
+            Console.WriteLine("Player 1 has WON!");
+            return true;
+        }
+        if (player2_choice == 'X')
+        {
+            Console.WriteLine("Player 2 has WON!");
+            return true;
+        }
+        return true;
+    }
+    else return false;
+}
 
 bool getPlayer1Square()
 {
+    getWin();
     int count1 = 0;
     Console.Write("\n\nPlayer 1, choose the square you want to play in using numbers 1 to 9: ");
     int player1_square = int.Parse(Console.ReadLine());
@@ -66,6 +104,7 @@ bool getPlayer1Square()
 
 bool getPlayer2Square()
 {
+    getWin();
     int count2 = 0;
     Console.Write("\n\nPlayer 2, choose the square you want to play in using numbers 1 to 9: ");
     int player2_square = int.Parse(Console.ReadLine());
@@ -86,10 +125,7 @@ bool getPlayer2Square()
 
 }
     
-
-
 Console.ReadKey();
-
 
 class TicTacToeGame {
 
@@ -147,8 +183,6 @@ class TicTacToeGame {
         }
         Console.WriteLine();
     }
-
-    
 
     public bool UpdateBoard(int playerSquare, Players Player)
     {
@@ -233,28 +267,35 @@ class TicTacToeGame {
         return true;
     }
 
-    //public void checkForXWin()
-    //{
-    //    for (int i = 0; i < 3; i++)
-    //    {
-    //        for (int j = 0; j < 3; j++)
-    //        {
-    //            if (Board[i, j] == 'X' && Board[i + 1, j + 1] == 'X' && Board[i + 2, j + 2] == 'X')
+    public bool checkForXWin()
+    {
+        if (Board[0,0] == 'X' && Board[1,1] == 'X' && Board[2,2] == 'X') return true;
 
-    //            if (Board[i, j] == 'X' && Board[i, j + 1] == 'X' && Board[i, j + 2] == 'X' )
-    //            if (Board[i + 1, j] == 'X' && Board[i + 1, j + 1] == 'X' && Board[i + 1 , j + 2] == 'X')
-    //            if (Board[i + 2, j] == 'X' && Board[i + 2, j + 1] == 'X' && Board[i + 2, j + 2] == 'X')
+        if (Board[0,0] == 'X' && Board[0,1] == 'X' && Board[0,2] == 'X') return true;
+        if (Board[1,0] == 'X' && Board[1,1] == 'X' && Board[1,2] == 'X') return true;
+        if (Board[2,0] == 'X' && Board[2,1] == 'X' && Board[2,2] == 'X') return true;
 
-    //            if (Board[i, j] == 'X' && Board[i + 1, j] == 'X' && Board[i + 2, j] == 'X')
-    //            if (Board[i, j + 1] == 'X' && Board[i + 1, j + 1] == 'X' && Board[i + 2, j + 1] == 'X')
-    //            if (Board[i, j + 2] == 'X' && Board[i + 1, j + 2] == 'X' && Board[i + 2, j + 2] == 'X')
+        if (Board[0,0] == 'X' && Board[1,0] == 'X' && Board[2,0] == 'X') return true;
+        if (Board[0,1] == 'X' && Board[1,1] == 'X' && Board[2,1] == 'X') return true;
+        if (Board[0,2] == 'X' && Board[1,2] == 'X' && Board[2,2] == 'X') return true;
 
-             
-    //        }
-    //    }
-     
-    //}
+        else return false;
+    }
 
+    public bool checkForOWin()
+    {
+        if (Board[0, 0] == 'O' && Board[1, 1] == 'O' && Board[2, 2] == 'O') return true;
+
+        if (Board[0, 0] == 'O' && Board[0, 1] == 'O' && Board[0, 2] == 'O') return true;
+        if (Board[1, 0] == 'O' && Board[1, 1] == 'O' && Board[1, 2] == 'O') return true;
+        if (Board[2, 0] == 'O' && Board[2, 1] == 'O' && Board[2, 2] == 'O') return true;
+
+        if (Board[0, 0] == 'O' && Board[1, 0] == 'O' && Board[2, 0] == 'O') return true;
+        if (Board[0, 1] == 'O' && Board[1, 1] == 'O' && Board[2, 1] == 'O') return true;
+        if (Board[0, 2] == 'O' && Board[1, 2] == 'O' && Board[2, 2] == 'O') return true;
+
+        else return false;
+    }
 
 }
 
