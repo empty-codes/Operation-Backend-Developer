@@ -23,104 +23,99 @@ Console.Clear();
 
 play.DisplayBoard();
 
+
+// runs game in loop until winner determined
 while (true)
 {
     bool player1State = getPlayer1Square();
+    if (getWin()) break;
 
     bool player2State = getPlayer2Square();
+    if (getWin()) break;
 
-    if (getWin() == true)
-    {
-        break;
-    }
-    if (getWin() == false)
-    {
-        continue;
-    }
-
-    if (player1State == false || player2State == false)
+    if (!player1State || !player2State)
     {
         Console.WriteLine("The game has ended as a draw!");
         break;
+
     }
+
 }
 
-bool getWin()
+
+    bool getWin()
 {
-    if (play.checkForOWin() == true)
+    if (play.checkForOWin())
     {
         if (player1_choice == 'O')
         {
             Console.WriteLine("Player 1 has WON!");
-            return true;
         }
-        if (player2_choice == 'O')
+        else
         {
             Console.WriteLine("Player 2 has WON!");
-            return true;
         }
         return true;
     }
-    if (play.checkForXWin() == true)
+    if (play.checkForXWin())
     {
         if (player1_choice == 'X')
         {
             Console.WriteLine("Player 1 has WON!");
-            return true;
         }
-        if (player2_choice == 'X')
+        else
         {
             Console.WriteLine("Player 2 has WON!");
-            return true;
         }
         return true;
     }
-    else return false;
+    return false;
 }
+
 
 bool getPlayer1Square()
 {
-    getWin();
-    int count1 = 0;
     Console.Write("\n\nPlayer 1, choose the square you want to play in using numbers 1 to 9: ");
-    int player1_square = int.Parse(Console.ReadLine());
+    int player1_square;
+    while (!int.TryParse(Console.ReadLine(), out player1_square) || player1_square < 1 || player1_square > 9)
+    {
+        Console.WriteLine("Invalid input! Please enter a number between 1 and 9.");
+    }
     if (play.UpdateBoard(player1_square, Players.Player1) == false)
     {
         Console.WriteLine("This square is already occupied! Choose another square");
-        for (int a = 1; a < 10; a++)
-        {
-            if (play.UpdateBoard(a, Players.Player1) == false) count1++;
-        }
-        if (count1 == 9) return false;
-        else
-        {
-            getPlayer1Square();
-        }
-        
+        return getPlayer1Square();
     }
+    if (play.IsBoardFull())
+    {
+        Console.WriteLine("The game has ended in a draw!");
+        return false;
+    }
+
     return true;
     
 }
 
 bool getPlayer2Square()
 {
-    getWin();
     int count2 = 0;
     Console.Write("\n\nPlayer 2, choose the square you want to play in using numbers 1 to 9: ");
-    int player2_square = int.Parse(Console.ReadLine());
+    int player2_square;
+    while (!int.TryParse(Console.ReadLine(), out player2_square) || player2_square < 1 || player2_square > 9)
+    {
+        Console.WriteLine("Invalid input! Please enter a number between 1 and 9.");
+    }
     if (play.UpdateBoard(player2_square, Players.Player2) == false)
     {
         Console.WriteLine("This square is already occupied! Choose another square");
-        for (int a = 1; a < 10; a++)
-        {
-            if (play.UpdateBoard(a, Players.Player2) == false) count2++;
-        }
-        if (count2 == 9) return false;
-        else
-        {
-            getPlayer2Square();
-        }
+        return getPlayer2Square();
     }
+    if (play.IsBoardFull())
+    {
+        Console.WriteLine("The game has ended in a draw!");
+        return false;
+    }
+
     return true;
 
 }
@@ -184,6 +179,7 @@ class TicTacToeGame {
         Console.WriteLine();
     }
 
+    // checks if square is occupied, if isn't updates, if is doesn't update
     public bool UpdateBoard(int playerSquare, Players Player)
     {
         switch(playerSquare)
@@ -296,6 +292,22 @@ class TicTacToeGame {
 
         else return false;
     }
+
+    public bool IsBoardFull()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (Board[i, j] != Player1 && Board[i, j] != Player2)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
 }
 
